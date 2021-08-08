@@ -2,11 +2,40 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
+const mongoose = require('mongoose');
 
+// database setup
+const athleteSchema = mongoose.Schema({
+  username: {
+    type: String,
+  },
+  logs: [
+    mongoose.Schema({
+      description: {
+        type: String,
+        required: true,
+      },
+      duration: {
+        type: Number,
+        required: true,
+      },
+      date: {
+        type: Date,
+        default: Date.now(),
+      },
+    }),
+  ],
+  count: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const Athlete = mongoose.model('Athlete', athleteSchema);
+
+// middleware
 app.use(cors());
 app.use(express.static('public'));
-
-// extra middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
