@@ -101,6 +101,28 @@ app.get('/api/users', (req, res) => {
   });
 });
 
+app.post('/api/users/:_id/exercises', (req, res) => {
+  // console.log(req.body[':_id']);
+  const userId = req.body[':_id'];
+
+  Athlete.findById(userId, (err, data) => {
+    if (err) res.json({ error: err });
+
+    data.logs = {
+      description: req.body.description,
+      duration: req.body.duration,
+      date: req.body.date !== '' ? req.body.date : Date.now(),
+    };
+    data.count = data.logs.length;
+
+    data.save((err) => {
+      if (err) res.json({ error: err });
+
+      res.json(data);
+    });
+  });
+});
+
 // server mount
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port);
