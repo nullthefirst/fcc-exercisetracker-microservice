@@ -64,6 +64,21 @@ app.get('/api/hello', (req, res) => {
   res.json({ greeting: 'Hello API' });
 });
 
+app.post('/api/users', (req, res) => {
+  if (req.body.username !== undefined) {
+    const newUser = new Athlete({ username: req.body.username });
+
+    try {
+      newUser.save();
+      res.json({ username: newUser.username, _id: newUser._id });
+    } catch (err) {
+      res.json({ error: err });
+    }
+  } else {
+    res.json({ error: 'username value is undefined' });
+  }
+});
+
 // server mount
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port);
