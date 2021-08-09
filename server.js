@@ -141,7 +141,11 @@ app.post('/api/users/:_id/exercises', (req, res) => {
     data.save((err) => {
       if (err) res.json({ error: err });
 
-      res.json(data);
+      res.send({
+        _id: data._id,
+        username: data.username,
+        logs: data.logs,
+      });
     });
   });
 });
