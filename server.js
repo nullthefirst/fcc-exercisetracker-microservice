@@ -105,14 +105,35 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   // console.log(req.body[':_id']);
   const userId = req.body[':_id'];
 
+  // const update = {
+  //   logs: {
+  //     description: req.body.description,
+  //     duration: req.body.duration,
+  //     date: req.body.date !== '' ? req.body.date : Date.now(),
+  //   },
+  //   count: data.logs.length,
+  // };
+
+  // Athlete.findOneAndUpdate(
+  //   { _id: userId },
+  //   update,
+  //   { new: true },
+  //   (err, data) => {
+  //     if (err) res.json({ error: err });
+
+  //     res.send(data);
+  //   },
+  // );
+
   Athlete.findById(userId, (err, data) => {
     if (err) res.json({ error: err });
 
-    data.logs = {
+    data.logs.push({
       description: req.body.description,
       duration: req.body.duration,
       date: req.body.date !== '' ? req.body.date : Date.now(),
-    };
+    });
+
     data.count = data.logs.length;
 
     data.save((err) => {
