@@ -119,11 +119,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
     data.save();
 
-    res.send({
-      _id: data._id,
-      username: data.username,
-      logs: data.logs,
-    });
+    res.send({ data });
   } catch (error) {
     res.json({ error: error });
   }
