@@ -103,36 +103,12 @@ app.get('/api/users', (req, res) => {
   });
 });
 
-app.post('/api/users/:_id/exercises', (req, res) => {
-  // console.log(req.body[':_id']);
+app.post('/api/users/:_id/exercises', async (req, res) => {
   const userId = req.body[':_id'];
 
-  // const update = {
-  //   logs: {
-  //     description: req.body.description,
-  //     duration: req.body.duration,
-  //     date: req.body.date !== '' ? req.body.date : Date.now(),
-  //   },
-  //   count: data.logs.length,
-  // };
+  const data = await Athlete.findById(userId);
 
-  // Athlete.findOneAndUpdate(
-  //   { _id: userId },
-  //   update,
-  //   { new: true },
-  //   (err, data) => {
-  //     if (err) res.json({ error: err });
-
-  //     res.send(data);
-  //   },
-  // );
-
-  Athlete.findById(userId, (err, data) => {
-    if (err) {
-      res.json({ error: err });
-      return err;
-    }
-
+  try {
     data.logs.push({
       description: req.body.description,
       duration: req.body.duration,
@@ -141,16 +117,16 @@ app.post('/api/users/:_id/exercises', (req, res) => {
 
     data.count = data.logs.length;
 
-    data.save((err) => {
-      if (err) res.json({ error: err });
+    data.save();
 
-      res.send({
-        _id: data._id,
-        username: data.username,
-        logs: data.logs,
-      });
+    res.send({
+      _id: data._id,
+      username: data.username,
+      logs: data.logs,
     });
-  });
+  } catch (error) {
+    res.json({ error: err });
+  }
 });
 
 // server mount
