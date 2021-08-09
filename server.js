@@ -79,6 +79,28 @@ app.post('/api/users', (req, res) => {
   }
 });
 
+app.get('/api/users', (req, res) => {
+  Athlete.find({}, (err, data) => {
+    if (err) res.json({ error: err });
+
+    const users = [...data];
+
+    let parsedUserObj = [];
+
+    for (let user of users) {
+      let userObj = {};
+      for (let info in user) {
+        if (info === 'username' || info === '_id') {
+          userObj[info] = user[info];
+        }
+      }
+      parsedUserObj.push(userObj);
+    }
+
+    res.send(parsedUserObj);
+  });
+});
+
 // server mount
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port);
