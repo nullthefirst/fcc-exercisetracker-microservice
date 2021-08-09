@@ -5,6 +5,22 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 
 // database setup
+const mongoURI = process.env.MONGO_URI;
+
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  dbName: process.env.MONGO_DBNAME,
+});
+
+const db = mongoose.connection;
+
+if (!db) {
+  console.log('Error connecting MongoDB');
+} else {
+  console.log('Successfully connected MongoDB');
+}
+
 const athleteSchema = mongoose.Schema({
   username: {
     type: String,
