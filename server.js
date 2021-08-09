@@ -125,7 +125,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       logs: data.logs,
     });
   } catch (error) {
-    res.json({ error: err });
+    res.json({ error: error });
   }
 });
 
