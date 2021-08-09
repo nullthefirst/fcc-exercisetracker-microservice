@@ -128,7 +128,10 @@ app.post('/api/users/:_id/exercises', (req, res) => {
   // );
 
   Athlete.findById(userId, (err, data) => {
-    if (err) res.json({ error: err });
+    if (err) {
+      res.json({ error: err });
+      return err;
+    }
 
     data.logs.push({
       description: req.body.description,
