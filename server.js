@@ -26,7 +26,7 @@ const athleteSchema = mongoose.Schema({
   username: {
     type: String,
   },
-  logs: {
+  log: {
     type: [
       {
         description: {
@@ -110,7 +110,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   const data = await Athlete.findById(userId);
 
   try {
-    data.logs.push({
+    data.log.push({
       description: req.body.description,
       duration: req.body.duration,
       date:
@@ -119,7 +119,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
           : moment().format('ddd MMM DD YYYY'),
     });
 
-    data.count = data.logs.length;
+    data.count = data.log.length;
 
     data.save();
 
@@ -147,7 +147,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     res.json({
       username: data.username,
       _id: data._id,
-      logs: data.logs,
+      log: data.log,
       count: data.count,
     });
   } catch (err) {
