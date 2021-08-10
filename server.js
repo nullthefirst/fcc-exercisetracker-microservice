@@ -103,6 +103,7 @@ app.get('/api/users', (req, res) => {
   });
 });
 
+// TODO: <start> correct implementation
 app.post('/api/users/:_id/exercises', async (req, res) => {
   const userId = req.body[':_id'];
 
@@ -122,6 +123,24 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     res.json(data);
   } catch (error) {
     res.json({ error: error });
+  }
+});
+// TODO: <end>
+
+app.get('/api/users/:_id/logs', async (req, res) => {
+  const userId = req.params['_id'];
+
+  const data = await Athlete.findById(userId);
+
+  try {
+    res.json({
+      username: data.username,
+      _id: data._id,
+      logs: data.logs,
+      count: data.count,
+    });
+  } catch (err) {
+    res.json({ error: err });
   }
 });
 
