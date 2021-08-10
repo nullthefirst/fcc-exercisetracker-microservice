@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 // database setup
 const mongoURI = process.env.MONGO_URI;
@@ -103,7 +104,6 @@ app.get('/api/users', (req, res) => {
   });
 });
 
-// TODO: <start> correct implementation
 app.post('/api/users/:_id/exercises', async (req, res) => {
   const userId = req.body[':_id'];
 
@@ -113,19 +113,30 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     data.logs.push({
       description: req.body.description,
       duration: req.body.duration,
-      date: req.body.date !== '' ? req.body.date : Date.now(),
+      date:
+        req.body.date !== ''
+          ? moment(req.body.date, 'YYYY-MM-DD').format('ddd MMM DD YYYY')
+          : moment().format('ddd MMM DD YYYY'),
     });
 
     data.count = data.logs.length;
 
     data.save();
 
-    res.json(data);
+    res.json({
+      username: data.username,
+      description: req.body.description,
+      duration: req.body.duration,
+      _id: data._id,
+      date:
+        req.body.date !== ''
+          ? moment(req.body.date, 'YYYY-MM-DD').format('ddd MMM DD YYYY')
+          : moment().format('ddd MMM DD YYYY'),
+    });
   } catch (error) {
     res.json({ error: error });
   }
 });
-// TODO: <end>
 
 app.get('/api/users/:_id/logs', async (req, res) => {
   const userId = req.params['_id'];
@@ -134,6 +145,8 @@ app.get('/api/users/:_id/logs', async (req, res) => {
 
   try {
     res.json({
+      username: data.username,
+      _id: data._id,
       logs: data.logs,
       count: data.count,
     });
