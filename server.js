@@ -3,7 +3,6 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const moment = require('moment');
 
 // database setup
 const mongoURI = process.env.MONGO_URI;
@@ -110,13 +109,19 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   const data = await Athlete.findById(userId);
 
   try {
+    const dateArray = req.body.date.split('-');
+
     data.log.push({
       description: req.body.description,
       duration: req.body.duration,
       date:
         req.body.date !== ''
-          ? moment(req.body.date, 'YYYY-MM-DD').format('ddd MMM DD YYYY')
-          : moment().format('ddd MMM DD YYYY'),
+          ? Date(
+              parseInt(dateArray[0]), // year
+              parseInt(dateArray[1]), // month
+              parseInt(dateArray[2]), // day
+            ).toDateString()
+          : new Date().toDateString(),
     });
 
     data.count = data.log.length;
@@ -130,11 +135,15 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       _id: data._id,
       date:
         req.body.date !== ''
-          ? moment(req.body.date, 'YYYY-MM-DD').format('ddd MMM DD YYYY')
-          : moment().format('ddd MMM DD YYYY'),
+          ? Date(
+              parseInt(dateArray[0]), // year
+              parseInt(dateArray[1]), // month
+              parseInt(dateArray[2]), // day
+            ).toDateString()
+          : new Date().toDateString(),
     });
-  } catch (error) {
-    res.json({ error: error });
+  } catch (err) {
+    res.json({ error: err });
   }
 });
 
