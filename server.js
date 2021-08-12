@@ -112,8 +112,9 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     const dateArray = req.body.date.split('-');
 
     data.log.push({
-      description: req.body.description,
-      duration: parseInt(req.body.duration),
+      description:
+        req.body.description !== '' ? req.body.description : 'description',
+      duration: req.body.duration !== '' ? parseInt(req.body.duration) : 1,
       date:
         req.body.date !== '' ||
         req.body.date !== undefined ||
@@ -134,8 +135,9 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
     res.json({
       username: data.username,
-      description: req.body.description,
-      duration: parseInt(req.body.duration),
+      description:
+        req.body.description !== '' ? req.body.description : 'description',
+      duration: req.body.duration !== '' ? parseInt(req.body.duration) : 1,
       _id: data._id,
       date:
         req.body.date !== '' ||
