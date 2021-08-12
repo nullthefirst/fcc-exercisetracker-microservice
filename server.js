@@ -113,7 +113,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
     data.log.push({
       description: req.body.description,
-      duration: req.body.duration,
+      duration: parseInt(req.body.duration),
       date:
         req.body.date !== ''
           ? new Date(
@@ -131,7 +131,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
     res.json({
       username: data.username,
       description: req.body.description,
-      duration: req.body.duration,
+      duration: parseInt(req.body.duration),
       _id: data._id,
       date:
         req.body.date !== ''
