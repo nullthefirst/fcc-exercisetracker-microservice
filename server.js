@@ -118,11 +118,13 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
         req.body.date !== '' ||
         req.body.date !== undefined ||
         req.body.date !== null
-          ? new Date(
-              parseInt(dateArray[0]), // year
-              parseInt(dateArray[1]), // month
-              parseInt(dateArray[2]), // day
-            ).toDateString()
+          ? dateArray[0] !== ''
+            ? new Date(
+                parseInt(dateArray[0]), // year
+                parseInt(dateArray[1]), // month
+                parseInt(dateArray[2]), // day
+              ).toDateString()
+            : new Date().toDateString()
           : new Date().toDateString(),
     });
 
@@ -139,11 +141,13 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
         req.body.date !== '' ||
         req.body.date !== undefined ||
         req.body.date !== null
-          ? new Date(
-              parseInt(dateArray[0]), // year
-              parseInt(dateArray[1]), // month
-              parseInt(dateArray[2]), // day
-            ).toDateString()
+          ? dateArray[0] !== ''
+            ? new Date(
+                parseInt(dateArray[0]), // year
+                parseInt(dateArray[1]), // month
+                parseInt(dateArray[2]), // day
+              ).toDateString()
+            : new Date().toDateString()
           : new Date().toDateString(),
     });
   } catch (err) {
