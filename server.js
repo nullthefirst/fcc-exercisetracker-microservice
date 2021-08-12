@@ -116,7 +116,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       duration: req.body.duration,
       date:
         req.body.date !== ''
-          ? Date(
+          ? new Date(
               parseInt(dateArray[0]), // year
               parseInt(dateArray[1]), // month
               parseInt(dateArray[2]), // day
@@ -135,7 +135,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       _id: data._id,
       date:
         req.body.date !== ''
-          ? Date(
+          ? new Date(
               parseInt(dateArray[0]), // year
               parseInt(dateArray[1]), // month
               parseInt(dateArray[2]), // day
