@@ -107,7 +107,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   console.log('TEST BODY >> ' + JSON.stringify(req.body));
   console.log('TEST PARAMS >> ' + JSON.stringify(req.params));
 
-  const userId = req.body[':_id'];
+  const userId = req.params['_id'];
 
   const data = await Athlete.findById(userId);
 
