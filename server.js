@@ -104,6 +104,9 @@ app.get('/api/users', (req, res) => {
 });
 
 app.post('/api/users/:_id/exercises', async (req, res) => {
+  console.log('TEST BODY >> ' + JSON.stringify(req.body));
+  console.log('TEST PARAMS >> ' + JSON.stringify(req.params));
+
   const userId = req.body[':_id'];
 
   const data = await Athlete.findById(userId);
@@ -158,7 +161,10 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 });
 
 app.get('/api/users/:_id/logs', async (req, res) => {
-  const userId = req.params['_id'];
+  console.log('TEST BODY >> ' + JSON.stringify(req.body));
+  console.log('TEST PARAMS >> ' + JSON.stringify(req.params));
+
+  const userId = req.params[':_id'];
 
   const data = await Athlete.findById(userId);
 
