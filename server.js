@@ -141,7 +141,6 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       description:
         req.body.description !== '' ? req.body.description : 'description',
       duration: req.body.duration !== '' ? parseInt(req.body.duration) : 1,
-      _id: data._id,
       date:
         req.body.date !== '' ||
         req.body.date !== undefined ||
@@ -154,6 +153,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
               ).toDateString()
             : new Date().toDateString()
           : new Date().toDateString(),
+      _id: data._id,
     });
   } catch (err) {
     res.json({ error: err });
