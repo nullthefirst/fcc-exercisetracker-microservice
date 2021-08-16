@@ -113,6 +113,7 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
 
   try {
     const dateArray = req.body.date.split('-');
+    const [year, month, day] = dateArray;
 
     data.log.push({
       description:
@@ -124,9 +125,9 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
         req.body.date !== null
           ? dateArray[0] !== ''
             ? new Date(
-                parseInt(dateArray[0]), // year
-                parseInt(dateArray[1]), // month
-                parseInt(dateArray[2]), // day
+                parseInt(year),
+                parseInt(month - 1),
+                parseInt(day),
               ).toDateString()
             : new Date().toDateString()
           : new Date().toDateString(),
@@ -147,9 +148,9 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
         req.body.date !== null
           ? dateArray[0] !== ''
             ? new Date(
-                parseInt(dateArray[0]), // year
-                parseInt(dateArray[1]), // month
-                parseInt(dateArray[2]), // day
+                parseInt(year),
+                parseInt(month - 1),
+                parseInt(day),
               ).toDateString()
             : new Date().toDateString()
           : new Date().toDateString(),
