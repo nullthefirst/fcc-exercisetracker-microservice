@@ -169,12 +169,30 @@ app.get('/api/users/:_id/logs', async (req, res) => {
 
   const data = await Athlete.findById(userId);
 
+  const logData = [...data.log];
+
+  let userLog = [];
+
+  for (const log of logData) {
+    const { description, duration, date } = log;
+
+    let parsedLog = {
+      description: description,
+      duration: duration,
+      date: date.toDateString(),
+    };
+
+    userLog.push(parsedLog);
+  }
+
+  console.log('PARSED LOG >>>' + JSON.stringify(userLog));
+
   try {
     res.json({
       username: data.username,
-      _id: data._id,
-      log: data.log,
       count: data.count,
+      _id: data._id,
+      log: userLog,
     });
   } catch (err) {
     res.json({ error: err });
