@@ -21,27 +21,30 @@ if (!db) {
   console.log('Successfully connected MongoDB');
 }
 
+const logSchema = mongoose.Schema(
+  {
+    description: {
+      type: String,
+      required: true,
+    },
+    duration: {
+      type: Number,
+      required: true,
+    },
+    date: {
+      type: String,
+      default: new Date().toDateString(),
+    },
+  },
+  { _id: false },
+);
+
 const athleteSchema = mongoose.Schema({
   username: {
     type: String,
   },
   log: {
-    type: [
-      {
-        description: {
-          type: String,
-          required: true,
-        },
-        duration: {
-          type: Number,
-          required: true,
-        },
-        date: {
-          type: Date,
-          default: Date.now(),
-        },
-      },
-    ],
+    type: [logSchema],
   },
   count: {
     type: Number,
@@ -169,30 +172,12 @@ app.get('/api/users/:_id/logs', async (req, res) => {
 
   const data = await Athlete.findById(userId);
 
-  const logData = [...data.log];
-
-  let userLog = [];
-
-  for (const log of logData) {
-    const { description, duration, date } = log;
-
-    let parsedLog = {
-      description: description,
-      duration: duration,
-      date: date.toDateString(),
-    };
-
-    userLog.push(parsedLog);
-  }
-
-  console.log('PARSED LOG >>>' + JSON.stringify(userLog));
-
   try {
     res.json({
       username: data.username,
       count: data.count,
       _id: data._id,
-      log: userLog,
+      log: data.log,
     });
   } catch (err) {
     res.json({ error: err });
