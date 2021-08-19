@@ -3,6 +3,7 @@ const app = express();
 const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 // database setup
 const mongoURI = process.env.MONGO_URI;
@@ -114,8 +115,12 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   try {
     const dateArray = req.body.date
       ? req.body.date.split('-')
-      : req.params.date.split('-');
+      : req.params.date
+      ? req.params.date.split('-')
+      : moment().format('YYYY-MM-DD').split('-');
     const [year, month, day] = dateArray;
+
+    console.log(moment().format('YYYY-MM-DD'));
 
     data.log.push({
       description:
