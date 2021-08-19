@@ -1,3 +1,4 @@
+const querystring = require('querystring');
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -61,6 +62,17 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// utility functions
+
+const queryCheck = (queryValue) => {
+  return (
+    !queryValue ||
+    queryValue === '' ||
+    queryValue === '0' ||
+    queryValue === 'undefined'
+  );
+};
+
 // api routes
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html');
@@ -120,8 +132,6 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       : moment().format('YYYY-MM-DD').split('-');
     const [year, month, day] = dateArray;
 
-    console.log(moment().format('YYYY-MM-DD'));
-
     data.log.push({
       description:
         req.body.description !== '' ? req.body.description : 'description',
@@ -170,11 +180,19 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   const data = await Athlete.findById(userId);
 
   try {
+    let logData;
+
+    if (queryCheck(req.query.limit)) {
+      logData = [...data.log];
+    } else {
+      logData = [...data.log].slice(0, parseInt(req.query.limit));
+    }
+
     res.json({
       username: data.username,
       count: data.count,
       _id: data._id,
-      log: data.log,
+      log: logData,
     });
   } catch (err) {
     res.json({ error: err });
