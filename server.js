@@ -112,7 +112,9 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   const data = await Athlete.findById(userId);
 
   try {
-    const dateArray = req.body.date.split('-');
+    const dateArray = req.body.date
+      ? req.body.date.split('-')
+      : req.params.date.split('-');
     const [year, month, day] = dateArray;
 
     data.log.push({
@@ -120,16 +122,12 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
         req.body.description !== '' ? req.body.description : 'description',
       duration: req.body.duration !== '' ? parseInt(req.body.duration) : 1,
       date:
-        req.body.date !== '' ||
-        req.body.date !== undefined ||
-        req.body.date !== null
-          ? dateArray[0] !== ''
-            ? new Date(
-                parseInt(year),
-                parseInt(month - 1),
-                parseInt(day),
-              ).toDateString()
-            : new Date().toDateString()
+        dateArray[0] !== ''
+          ? new Date(
+              parseInt(year),
+              parseInt(month - 1),
+              parseInt(day),
+            ).toDateString()
           : new Date().toDateString(),
     });
 
