@@ -182,10 +182,42 @@ app.get('/api/users/:_id/logs', async (req, res) => {
   try {
     let logData;
 
-    if (queryCheck(req.query.limit)) {
+    if (
+      queryCheck(req.query.limit) &&
+      queryCheck(req.query.from) &&
+      queryCheck(req.query.to)
+    ) {
       logData = [...data.log];
-    } else {
+    } else if (
+      !queryCheck(req.query.limit) &&
+      queryCheck(req.query.from) &&
+      queryCheck(req.query.to)
+    ) {
       logData = [...data.log].slice(0, parseInt(req.query.limit));
+    } else if (
+      queryCheck(req.query.limit) &&
+      !queryCheck(req.query.from) &&
+      !queryCheck(req.query.to)
+    ) {
+      logData = [...data.log].filter((log) =>
+        moment(new Date(Date.parse(log['date']))).isBetween(
+          req.query.from,
+          req.query.to,
+        ),
+      );
+    } else if (
+      !queryCheck(req.query.limit) &&
+      !queryCheck(req.query.from) &&
+      !queryCheck(req.query.to)
+    ) {
+      logData = [...data.log]
+        .filter((log) =>
+          moment(new Date(Date.parse(log['date']))).isBetween(
+            req.query.from,
+            req.query.to,
+          ),
+        )
+        .slice(0, parseInt(req.query.limit));
     }
 
     res.json({
